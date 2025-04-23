@@ -64,9 +64,21 @@ def check_psbdmp(email):
 def ip_lookup(ip):
     try:
         url = f"https://ipapi.co/{ip}/json/"
-        response = requests.get(url)
+        headers = {'User-Agent': 'Mozilla/5.0'}  # Required for free tier
+        response = requests.get(url, headers=headers)
         data = response.json()
-        return "\n".join([f"📍 {key.capitalize()}: {data.get(key, 'N/A')}" for key in ["ip", "city", "region", "country_name", "org", "asn", "latitude", "longitude"]])
+        if 'error' in data:
+            return f"❌ IPAPI Error: {data.get('reason', 'Unknown error')}"
+        return "\n".join([
+            f"📍 IP: {data.get('ip', 'N/A')}",
+            f"📍 City: {data.get('city', 'N/A')}",
+            f"📍 Region: {data.get('region', 'N/A')}",
+            f"📍 Country: {data.get('country_name', 'N/A')}",
+            f"📍 Org: {data.get('org', 'N/A')}",
+            f"📍 ASN: {data.get('asn', 'N/A')}",
+            f"📍 Latitude: {data.get('latitude', 'N/A')}",
+            f"📍 Longitude: {data.get('longitude', 'N/A')}",
+        ])
     except Exception as e:
         return f"❌ Error in IP lookup: {e}"
 
