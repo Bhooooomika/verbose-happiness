@@ -1,0 +1,5 @@
+socialscan
+requests
+email-validator
+hashlib
+subprocess
